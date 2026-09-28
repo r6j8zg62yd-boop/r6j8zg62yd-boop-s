@@ -1,0 +1,7 @@
+curl https://api.x.ai/v1/responses \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $XAI_API_KEY" \
+  -d '{
+    "model": "grok-4.7",
+    "input": "Fix this function and explain the bug: function median(a){a.sort();return a[a.length/2]}"
+}'
