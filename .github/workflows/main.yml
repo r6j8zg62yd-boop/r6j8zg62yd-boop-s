@@ -1,4 +1,4 @@
-{curl https://api.x.ai/v1/responses \
+curl https://api.x.ai/v1/responses \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $XAI_API_KEY" \
   -d '{
