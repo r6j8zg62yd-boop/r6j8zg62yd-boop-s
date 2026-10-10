@@ -1,13 +1,14 @@
-# r6j8zg62yd-boop-s
-cautious-parakeet?
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
-import “Copenzeppelin/ contracts/token/ ERC20/ERC20. so1”;
-contract MyToken is ERC20 {
-constructor ()
-ERC20 ( “MyToken”, “MTK”)
-{
-_mint (msg. sender, 1000e18);
-}
- }
- 
+# Note board
+
+A small static web app and a dependency-free text library.
+
+- `lib/textkit.js` exports `titleCase`, `slugify`, and `summarize`.
+- `web/` is the note board. It formats each note with that library.
+
+Serve the repository root so the page can import the library:
+
+```bash
+python3 -m http.server 8080
+```
+
+Open `http://127.0.0.1:8080/web/`.

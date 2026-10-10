@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Note board</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <p class="eyebrow">Web app + textkit library</p>
+        <h1>Note board</h1>
+        <p class="lede">
+          Titles, slugs, and previews come from <code>lib/textkit.js</code>.
+        </p>
+      </header>
+
+      <form id="note-form">
+        <label>
+          Title
+          <input id="title" name="title" required maxlength="80" placeholder="Launch notes" />
+        </label>
+        <label>
+          Body
+          <textarea id="body" name="body" required maxlength="500" rows="4" placeholder="What should we remember?"></textarea>
+        </label>
+        <button type="submit">Add note</button>
+      </form>
+
+      <section aria-live="polite">
+        <h2>Saved notes</h2>
+        <ul id="notes"></ul>
+        <p id="empty" class="empty">No notes yet.</p>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
