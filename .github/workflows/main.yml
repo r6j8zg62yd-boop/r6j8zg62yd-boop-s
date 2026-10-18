@@ -1,7 +1,30 @@
-curl https://api.x.ai/v1/responses \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $XAI_API_KEY" \
-  -d '{
-    "model": "grok-4.7",
-    "input": "Fix this function and explain the bug: function median(a){a.sort();return a[a.length/2]}"
-}'
+name: main
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ask xAI to review the median helper
+        env:
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+        run: |
+          if [ -z "${XAI_API_KEY}" ]; then
+            echo "XAI_API_KEY is not configured; skipping the API call."
+            exit 0
+          fi
+          curl --fail-with-body --show-error --silent \
+            https://api.x.ai/v1/responses \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${XAI_API_KEY}" \
+            -d '{
+              "model": "grok-4.7",
+              "input": "Fix this function and explain the bug: function median(a){a.sort();return a[a.length/2]}"
+            }'
