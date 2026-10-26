@@ -1,0 +1,24 @@
+name: Foundry
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      # Checkout already recurses submodules. `forge install` is the same
+      # step a fresh clone runs when submodule contents were not fetched.
+      - name: Install libraries and build
+        run: |
+          forge install
+          forge build
+          forge test

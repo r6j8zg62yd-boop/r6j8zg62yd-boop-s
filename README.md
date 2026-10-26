@@ -6,6 +6,30 @@ A small static web app and a dependency-free text library.
 - `web/` is the note board. It formats each note with that library.
 - `contracts/MyToken.sol` is MyToken (`MTK`, 18 decimals). The constructor mints `1000e18` to the deployer.
 
+## Contracts
+
+A fresh clone does not include the Foundry libraries. Install them, then compile. `forge install` with no arguments reads `.gitmodules` and checks out `lib/forge-std` (used by `test/MyToken.t.sol`).
+
+```bash
+# Foundry: https://book.getfoundry.sh/getting-started/installation
+forge install
+forge build
+```
+
+The same steps are `make build`. Tests:
+
+```bash
+forge test
+# or
+make test
+```
+
+To add another library, install it once and commit the submodule pointer:
+
+```bash
+forge install foundry-rs/forge-std
+```
+
 Serve the repository root so the page can import the library:
 
 ```bash
