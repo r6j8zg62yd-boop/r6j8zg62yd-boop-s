@@ -1,0 +1,7 @@
+# Foundry
+cache/
+out/
+broadcast/
+
+# Dependencies installed by `forge install` are tracked as git submodules.
+# Do not ignore lib/forge-std.
