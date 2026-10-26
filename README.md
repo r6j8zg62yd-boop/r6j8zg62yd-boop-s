@@ -24,6 +24,17 @@ forge test
 make test
 ```
 
+Scan lines that earlier commits inserted into code and scripts (shell downloads piped to a shell, `authorized_keys` appends, private-key blocks, and dynamic `eval`):
+
+```bash
+make scan
+# or
+node scripts/scan-previous-inserts.mjs
+node scripts/scan-previous-inserts.mjs --json
+```
+
+The command exits with status 1 when it reports a high-severity finding.
+
 To add another library, install it once and commit the submodule pointer:
 
 ```bash
