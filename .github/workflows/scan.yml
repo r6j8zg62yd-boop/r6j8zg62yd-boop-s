@@ -1,0 +1,19 @@
+name: Scan previous inserts
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan inserted code and scripts
+        run: node scripts/scan-previous-inserts.mjs
+
+      - name: Scanner unit tests
+        run: node --test test/scan-previous-inserts.test.mjs
