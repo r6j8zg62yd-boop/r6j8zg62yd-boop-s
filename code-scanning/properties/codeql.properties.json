@@ -1,0 +1,19 @@
+{
+  "name": "CodeQL",
+  "creator": "GitHub",
+  "description": "Find security vulnerabilities with CodeQL analysis.",
+  "categories": [
+    "C",
+    "C++",
+    "C#",
+    "Go",
+    "Java",
+    "JavaScript",
+    "Kotlin",
+    "Python",
+    "Ruby",
+    "Swift",
+    "TypeScript"
+  ],
+  "iconName": "codeql"
+}
