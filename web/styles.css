@@ -88,6 +88,18 @@ li p { margin: 0; }
 
 .empty { opacity: 0.7; }
 
+.error-code {
+  margin: 0;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+
+.home-link {
+  color: var(--accent);
+}
+
 @media (max-width: 480px) {
   .page { padding: 1.25rem 0.9rem 3rem; }
   button { width: 100%; }

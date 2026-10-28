@@ -35,6 +35,17 @@ node scripts/scan-previous-inserts.mjs --json
 
 The command exits with status 1 when it reports a high-severity finding.
 
+Error documents live in `web/` (`404.html`, `500.html`) and share `web/error-page.js`. Find those pages and recode any inline or `javascript:` scripts down to that module:
+
+```bash
+make recode-error-pages
+# or
+node scripts/recode-error-pages.mjs
+node scripts/recode-error-pages.mjs --check
+```
+
+`--check` exits with status 1 when a page would change. The rewrite leaves one tag: `<script type="module" src="./error-page.js"></script>`.
+
 To add another library, install it once and commit the submodule pointer:
 
 ```bash
