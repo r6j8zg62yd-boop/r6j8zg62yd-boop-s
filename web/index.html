@@ -25,11 +25,15 @@
           Body
           <textarea id="body" name="body" required maxlength="500" rows="4" placeholder="What should we remember?"></textarea>
         </label>
-        <button type="submit">Add note</button>
+        <div class="actions">
+          <button type="submit">Add note</button>
+          <button type="button" id="clear-notes" class="ghost">Clear notes</button>
+        </div>
       </form>
 
       <section aria-live="polite">
         <h2>Saved notes</h2>
+        <ul id="errors" class="errors" hidden></ul>
         <ul id="notes"></ul>
         <p id="empty" class="empty">No notes yet.</p>
       </section>
