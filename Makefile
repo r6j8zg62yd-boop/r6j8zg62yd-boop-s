@@ -1,4 +1,4 @@
-.PHONY: install build test scan recode-error-pages
+.PHONY: install build test scan recode-error-pages resource-errors
 
 # A fresh clone does not contain Foundry library checkouts.
 # `forge install` fetches the submodules listed in .gitmodules (forge-std).
@@ -20,3 +20,8 @@ scan:
 recode-error-pages:
 	node scripts/recode-error-pages.mjs --check
 	node --test test/recode-error-pages.test.mjs
+
+# Run clear, delete, and fabricate, and require every known error code.
+resource-errors:
+	node scripts/run-resource-errors.mjs --expect-errors
+	node --test test/resource-actions.test.mjs

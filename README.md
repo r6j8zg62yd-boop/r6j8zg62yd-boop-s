@@ -46,6 +46,17 @@ node scripts/recode-error-pages.mjs --check
 
 `--check` exits with status 1 when a page would change. The rewrite leaves one tag: `<script type="module" src="./error-page.js"></script>`.
 
+Clear, delete, and fabricate note resources through `lib/resource-actions.js`. Each action returns every error it finds, and `runResourceActions` keeps going after a failure so later errors are still reported. The note board uses those actions for add, delete, and clear.
+
+```bash
+make resource-errors
+# or
+node scripts/run-resource-errors.mjs --expect-errors
+node scripts/run-resource-errors.mjs --json
+```
+
+`--expect-errors` runs a built-in sequence and exits with status 1 when any known error code is missing. Without that flag the command prints every error and exits with status 1 when the run reported any.
+
 To add another library, install it once and commit the submodule pointer:
 
 ```bash
