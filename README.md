@@ -59,3 +59,12 @@ python3 -m http.server 8080
 ```
 
 Open `http://127.0.0.1:8080/web/`.
+
+## twak_wrap.py
+
+`twak/twak_wrap.py` documents a wallet and market CLI and answers with local sample JSON (no network, no transaction submission). Usage and the command list are in [docs/twak-wrap.md](docs/twak-wrap.md).
+
+```bash
+python3 twak/twak_wrap.py version
+python3 twak/twak_wrap.py --help
+```
